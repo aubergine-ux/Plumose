@@ -1,0 +1,36 @@
+/*
+ * Everything here is gated on classes the plugin puts on <html>, so switching
+ * blur off (Ctrl+Shift+B) needs no DOM work. Pointing at something clears it.
+ * Osmium's class names carry a build hash, hence the prefix matches.
+ */
+
+html.osm-blur.osm-blur-messages main[class*="chatContainer-"] [class*="message-"] > [class*="container-"],
+html.osm-blur.osm-blur-messages [class*="pinnedMessageBubble-"],
+html.osm-blur.osm-blur-names [class*="messageAuthor-"],
+html.osm-blur.osm-blur-names [class*="memberName-"],
+html.osm-blur.osm-blur-names [class*="usernameContainer-"],
+html.osm-blur.osm-blur-names a[href^="/chat/"] [class*="title-"],
+html.osm-blur.osm-blur-avatars [class*="avatar-"],
+html.osm-blur.osm-blur-avatars [class*="messageAvatar-"],
+html.osm-blur.osm-blur-sidebar a[href^="/chat/"] [class*="messagePreview"],
+html.osm-blur.osm-blur-sidebar [class*="channelListItem-"] [class*="messagePreview"] {
+    filter: blur(var(--osm-blur, 6px));
+    transition: filter .12s ease-out;
+}
+
+/* Hovering a message clears the whole message; hovering a row in a list clears that row. */
+html.osm-blur main[class*="chatContainer-"] [class*="message-"]:hover > [class*="container-"],
+html.osm-blur main[class*="chatContainer-"] [class*="message-"]:hover [class*="messageAuthor-"],
+html.osm-blur [class*="pinnedMessageBubble-"]:hover,
+html.osm-blur [class*="messageAuthor-"]:hover,
+html.osm-blur [class*="memberListRow-"]:hover [class*="memberName-"],
+html.osm-blur [class*="memberListRow-"]:hover [class*="avatar-"],
+html.osm-blur [class*="usernameContainer-"]:hover,
+html.osm-blur a[href^="/chat/"]:hover [class*="title-"],
+html.osm-blur a[href^="/chat/"]:hover [class*="messagePreview"],
+html.osm-blur a[href^="/chat/"]:hover [class*="avatar-"],
+html.osm-blur [class*="channelListItem-"]:hover [class*="messagePreview"],
+html.osm-blur [class*="avatar-"]:hover,
+html.osm-blur [class*="messageAvatar-"]:hover {
+    filter: none;
+}
