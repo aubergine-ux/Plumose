@@ -1,0 +1,58 @@
+.osm-vo-modal { width: min(520px, 100%); max-height: min(720px, 100%); }
+.osm-vo-list { display: flex; flex-direction: column; gap: 8px; }
+
+.osm-vo-call {
+    border: 1px solid var(--stroke-soft-200, #2b303b);
+    border-radius: 10px;
+    background: var(--bg-weak-50, #1a1c20);
+    overflow: hidden;
+}
+.osm-vo-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 12px;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+}
+button.osm-vo-head { cursor: pointer; }
+button.osm-vo-head:hover { background: var(--bg-soft-200, #262a30); }
+.osm-vo-name { min-width: 0; overflow: hidden; font-weight: 600; white-space: nowrap; text-overflow: ellipsis; }
+.osm-vo-place {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--text-soft-400, #717784);
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.osm-vo-count {
+    flex: 0 0 auto;
+    min-width: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background: var(--bg-soft-200, #262a30);
+    color: var(--text-sub-600, #99a0ae);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 18px;
+    text-align: center;
+}
+
+.osm-vo-people {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 12px 10px;
+    border-top: 1px solid var(--stroke-pale-100, #1f2329);
+}
+.osm-vo-person { display: flex; align-items: center; gap: 6px; color: var(--text-sub-600, #99a0ae); font-size: 13px; }
+.osm-vo-person.is-friend { color: var(--text-strong-950, #f5f7fa); }
+.osm-vo-person-name { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.osm-vo-flag { display: grid; flex: 0 0 auto; color: var(--icon-soft-400, #717784); }
+.osm-vo-flag.is-live { color: var(--state-error-base, #fb3748); }
