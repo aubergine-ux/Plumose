@@ -295,8 +295,9 @@
         card.append(
             h('div', { class: 'osm-plugin-head' },
                 h('div', { class: 'osm-plugin-text' },
-                    h('div', { class: 'osm-plugin-name' }, p.name),
-                    h('div', { class: 'osm-plugin-desc' }, p.description),
+                    // The grid tiles cut both short; the full text is in the tooltip and in the open tile.
+                    h('div', { class: 'osm-plugin-name', title: p.name }, p.name),
+                    h('div', { class: 'osm-plugin-desc', title: p.description }, p.description),
                 ),
                 expand,
                 h('input', {
@@ -304,8 +305,9 @@
                     onchange: (e) => Mod.setSettings(p.id, { enabled: e.target.checked }).then((next) => (settings = next)),
                 }),
             ),
-            hasSettings && body,
         );
+        // Element.append() would print a literal "false" for a plugin with no settings.
+        if (hasSettings) card.append(body);
         return card;
     }
 

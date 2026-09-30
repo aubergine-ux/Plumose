@@ -83,25 +83,43 @@
 
 /* --------------------------------------------------------- Mods list -- */
 
-.osm-plugin-list { display: flex; flex-direction: column; gap: 8px; }
+/* A grid of small tiles. A tile whose settings are open takes a whole row. */
+.osm-mods { width: min(660px, 100%); }
+.osm-plugin-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); grid-auto-flow: dense; gap: 8px; }
 
 .osm-plugin {
+    min-width: 0;
     border: 1px solid var(--stroke-soft-200, #2b303b);
     border-radius: 12px;
     background: var(--bg-weak-50, #1a1c20);
     transition: border-color .15s;
 }
 .osm-plugin.is-enabled { border-color: color-mix(in srgb, var(--primary-base, #1db954) 45%, var(--stroke-soft-200, #2b303b)); }
+.osm-plugin.is-open { grid-column: 1 / -1; }
 
+/* Name, settings chevron and switch on one line, the description underneath. */
 .osm-plugin-head {
-    display: flex;
+    display: grid;
+    grid-template: "name expand switch" auto "desc desc desc" auto / 1fr auto auto;
     align-items: center;
-    gap: 10px;
-    padding: 12px 14px;
+    gap: 4px 6px;
+    padding: 10px 12px;
 }
-.osm-plugin-text { flex: 1; min-width: 0; }
-.osm-plugin-name { font-weight: 600; }
-.osm-plugin-desc { color: var(--text-sub-600, #99a0ae); font-size: 12px; line-height: 17px; }
+.osm-plugin-text { display: contents; }
+.osm-plugin-name { grid-area: name; min-width: 0; overflow: hidden; font-size: 13px; font-weight: 600; white-space: nowrap; text-overflow: ellipsis; }
+.osm-plugin-desc {
+    grid-area: desc;
+    display: -webkit-box;
+    overflow: hidden;
+    color: var(--text-sub-600, #99a0ae);
+    font-size: 12px;
+    line-height: 16px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+.osm-plugin.is-open .osm-plugin-desc { display: block; }
+.osm-plugin-expand { grid-area: expand; width: 24px; height: 24px; }
+.osm-plugin-head > .osm-switch { grid-area: switch; }
 
 .osm-plugin-expand svg { transition: transform .15s; }
 .osm-plugin.is-open .osm-plugin-expand svg { transform: rotate(180deg); }
