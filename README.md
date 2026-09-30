@@ -33,8 +33,8 @@ The version comes from `package.json`.
 | 🕒 **[Friend Presence Log](#friend-presence-log)** | Records friends coming online, going idle or offline, and what they play or listen to. | On |
 | 📁 **[Server Folders](#server-folders)** | Groups servers in the left rail into collapsible, coloured folders. | On |
 | 🛡️ **[Show Hidden Roles](#show-hidden-roles)** | Marks non-public roles on profiles and lists every role a server has. | On |
+| ⚡ **[Quick Switcher](#quick-switcher)** | Ctrl+K to jump to any chat, channel or server. | On |
 | 🔒 **[Show Hidden Channels](#show-hidden-channels)** | Lists channels you can't open, with their name and topic. | Off |
-| ⚡ **[Quick Switcher](#quick-switcher)** | Ctrl+K to jump to any chat, channel or server. | Off |
 | 🎧 **[Voice Overview](#voice-overview)** | Everyone in voice across your servers, in one list. | Off |
 | 🤫 **[Silent Typing](#silent-typing)** | Stops Osmium telling others when you're typing. | Off |
 | 🙈 **[Privacy Blur](#privacy-blur)** | Blurs messages, names and pictures until you point at them. | Off |
@@ -166,10 +166,14 @@ A role in Osmium can be set to not *public*. Osmium's app never points that out,
 drops any role ID on a member that it has no role for. This plugin shows both:
 
 - **On profiles:** non-public roles get a dashed outline and an eye-off mark. Role IDs the member carries that Osmium doesn't draw are listed underneath.
-- **Server role list:** the shield button above the channel list opens every role Osmium holds for that server, with its colour, whether it's hidden or separated, what it grants, and which loaded members have it. Role IDs that members carry but that aren't in the role list get their own section.
+- **Server role list:** the shield button above the channel list opens every role Osmium holds for that server, with its colour, whether it's hidden or separated, what it grants, and who has it. Role IDs that members carry but that aren't in the role list get their own section.
 
-It only reads what Osmium has already loaded. A role the server keeps back entirely stays unknown,
-and members are only the ones Osmium has loaded so far.
+Who has a role is counted among the members in the member lists you've opened in that server. A
+member list only carries names, so opening the role list fetches those members' records, with the
+same request Osmium makes when you open a profile. Scroll a channel's member list to bring in more.
+
+Osmium's server decides what it puts on other people's records. If it leaves a hidden role off
+them, no client can tell who has it, and the role list says so.
 
 </details>
 
@@ -192,7 +196,7 @@ Click a hidden channel for its name, type, category, topic and, for voice channe
 
 <a name="quick-switcher"></a>
 
-Off by default. Press **Ctrl+K** (Cmd+K on macOS) and type part of a name. ↑ and ↓ move, Enter
+Press **Ctrl+K** (Cmd+K on macOS) and type part of a name. ↑ and ↓ move, Enter
 opens, Esc closes. Start with `@` for chats only, `#` for channels or `*` for servers. With nothing
 typed, chats and channels with unread messages come first.
 
