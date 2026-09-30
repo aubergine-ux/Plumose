@@ -5,7 +5,7 @@
 [![Osmium Client Mod](https://img.shields.io/badge/Osmium-Client%20Mod-FFB6D9?style=for-the-badge&labelColor=FFD6EC)](https://github.com/aubergine-ux/Plumose)
 [![Version](https://img.shields.io/badge/Version-1.2.0-C9A7FF?style=for-the-badge&labelColor=E5D4FF)](package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-A9C9FF?style=for-the-badge&labelColor=D6E4FF)](LICENSE)
-[![Plugins](https://img.shields.io/badge/Plugins-12-FFCBA4?style=for-the-badge&labelColor=FFE3C7)](#plugins)
+[![Plugins](https://img.shields.io/badge/Plugins-14-FFCBA4?style=for-the-badge&labelColor=FFE3C7)](#plugins)
 
 ![JavaScript](https://img.shields.io/badge/JavaScript-No%20build%20step-A7C7FF?style=flat&logo=javascript&logoColor=1B3A6B&labelColor=D6E8FF)
 ![Node](https://img.shields.io/badge/Node-18%2B-B8E6B8?style=flat&logo=nodedotjs&logoColor=1F5C1F&labelColor=E0F5E0)
@@ -14,7 +14,7 @@
 
 </div>
 
-A Vencord-style client mod for the **official Osmium desktop app**, with a plugin system and twelve
+A Vencord-style client mod for the **official Osmium desktop app**, with a plugin system and fourteen
 plugins. It changes nothing inside Osmium's code. Like Vencord on Discord, it moves the official
 `app.asar` aside and puts a small loader in its place. The loader starts the mod and then boots the
 untouched official app.
@@ -34,6 +34,8 @@ The version comes from `package.json`.
 | 📁 **[Server Folders](#server-folders)** | Groups servers in the left rail into collapsible, coloured folders. | On |
 | 🛡️ **[Show Hidden Roles](#show-hidden-roles)** | Marks non-public roles on profiles and lists every role a server has. | On |
 | ⚡ **[Quick Switcher](#quick-switcher)** | Ctrl+K to jump to any chat, channel or server. | On |
+| 🖼️ **[Avatar Viewer](#avatar-viewer)** | Ctrl+click any profile picture or server icon to open it full size. | On |
+| 💬 **[Custom Status](#custom-status)** | Set a status message that shows under your name. | On |
 | 🔒 **[Show Hidden Channels](#show-hidden-channels)** | Lists channels you can't open, with their name and topic. | Off |
 | 🎧 **[Voice Overview](#voice-overview)** | Everyone in voice across your servers, in one list. | Off |
 | 🤫 **[Silent Typing](#silent-typing)** | Stops Osmium telling others when you're typing. | Off |
@@ -174,6 +176,37 @@ same request Osmium makes when you open a profile. Scroll a channel's member lis
 
 Osmium's server decides what it puts on other people's records. If it leaves a hidden role off
 them, no client can tell who has it, and the role list says so.
+
+</details>
+
+<details>
+<summary><h3>🖼️ Avatar Viewer</h3></summary>
+
+<a name="avatar-viewer"></a>
+
+**Ctrl+click** (Cmd+click on macOS) any profile picture or server icon, anywhere in the app, to open
+it full size, the way clicking the picture on a profile card does. The viewer shows the image's size
+and has **Copy image** and **Save**. The image button above the channel list opens the current
+server's icon. Alt+click is available instead of Ctrl+click in the settings.
+
+Osmium downloads each picture once at full size and scales it down on the page, so the viewer shows
+that same image and downloads nothing extra. Accounts and servers with no picture (a letter) have
+nothing to open.
+
+</details>
+
+<details>
+<summary><h3>💬 Custom Status</h3></summary>
+
+<a name="custom-status"></a>
+
+The speech-bubble button on your account card sets a status message such as *brb* or *in a meeting*.
+It shows under your name in member lists when you aren't playing or listening to something. Pick
+when it clears (30 minutes, 1 hour, 4 hours, today, or never), reuse a recent one, or clear it.
+
+Osmium's app shows custom statuses but has no screen for setting one. The plugin adds the message to
+the status the app already sends, beside any game or music activity. Turning the plugin off clears
+the message.
 
 </details>
 
@@ -346,7 +379,7 @@ src/plugins/*             the plugins
 <details>
 <summary><h2>⚠️ Known limitations</h2></summary>
 
-- **Plugins added in 1.2.0** (hidden roles, hidden channels, quick switcher, voice overview, silent typing, privacy blur, custom CSS): written from Osmium's web bundle and checked against a simulated page, not yet against a live session. If one misbehaves, switch it off in the Plumose screen.
+- **Plugins added in 1.2.0** (hidden roles, hidden channels, quick switcher, avatar viewer, custom status, voice overview, silent typing, privacy blur, custom CSS): written from Osmium's web bundle and checked against a simulated page, not yet against a live session. If one misbehaves, switch it off in the Plumose screen.
 - **Show Hidden Channels / Roles:** they show what Osmium's app already holds. If the server stops sending channels or roles you can't see, there is nothing to show.
 - **Shuffle/repeat on the "This computer" music source:** Spotify's Linux app reports both over MPRIS but ignores changes, so the buttons are hidden there.
 - **Spotify Web API source:** not yet tested against a live Spotify developer app.
