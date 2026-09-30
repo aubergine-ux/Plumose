@@ -1,0 +1,33 @@
+/* Same round button as Osmium's search button above the channel list. */
+.osm-av-btn {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 21px;
+    background: var(--surface-surface-0, transparent);
+    color: var(--icon-soft-400, #717784);
+    cursor: pointer;
+    transition: color .15s;
+}
+.osm-av-btn:hover { color: var(--text-strong-950, #f5f7fa); }
+.osm-av-btn:focus-visible { outline: 2px solid var(--focus-neutral, rgba(255,255,255,.3)); outline-offset: 1px; }
+
+.osm-av-modal { width: auto; min-width: min(320px, 100%); max-width: min(720px, 100%); max-height: 100%; }
+.osm-av { display: flex; flex-direction: column; gap: 12px; }
+.osm-av-frame { display: grid; place-items: center; }
+/* Small pictures are scaled up to a useful size; large ones are capped to the window. */
+.osm-av-img {
+    display: block;
+    width: min(512px, 80vw, 62vh);
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    background: var(--bg-weak-50, #1a1c20);
+    user-select: none;
+}
+.osm-av-bar { display: flex; align-items: center; gap: 8px; }
+.osm-av-status { flex: 1; min-width: 0; color: var(--text-soft-400, #717784); font-size: 12px; }
