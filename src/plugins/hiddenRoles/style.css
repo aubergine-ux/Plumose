@@ -1,0 +1,81 @@
+/* The shield button sits beside Osmium's round search button above the channel list. */
+.osm-hr-btn {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 21px;
+    background: var(--surface-surface-0, transparent);
+    color: var(--icon-soft-400, #717784);
+    cursor: pointer;
+    transition: color .15s;
+}
+.osm-hr-btn:hover { color: var(--text-strong-950, #f5f7fa); }
+.osm-hr-btn:focus-visible { outline: 2px solid var(--focus-neutral, rgba(255,255,255,.3)); outline-offset: 1px; }
+
+/* Non-public roles on a profile card get a dashed outline and an eye-off mark. */
+li[data-osm-hr] { outline: 1px dashed var(--text-soft-400, #717784); outline-offset: -1px; }
+li[data-osm-hr]::after {
+    content: '';
+    flex: 0 0 auto;
+    width: 12px;
+    height: 12px;
+    margin-left: 4px;
+    background: currentColor;
+    opacity: .7;
+    mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg>') center / contain no-repeat;
+}
+
+.osm-hr-extra { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.osm-hr-extra-label { color: var(--text-soft-400, #717784); font-size: 12px; line-height: 16px; }
+.osm-hr-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.osm-hr-chip {
+    padding: 2px 8px;
+    border: 1px dashed var(--stroke-soft-200, #2b303b);
+    border-radius: 6px;
+    color: var(--text-sub-600, #99a0ae);
+    font-size: 12px;
+    line-height: 18px;
+}
+
+/* ------------------------------------------------- server role list -- */
+
+.osm-hr-modal { width: min(560px, 100%); height: min(720px, 100%); }
+.osm-hr-body { display: flex; flex-direction: column; gap: 10px; }
+.osm-hr-list { display: flex; flex-direction: column; gap: 6px; }
+.osm-hr-section {
+    margin-top: 6px;
+    color: var(--text-soft-400, #717784);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.osm-hr-role {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+    border: 1px solid var(--stroke-soft-200, #2b303b);
+    border-radius: 10px;
+    background: var(--bg-weak-50, #1a1c20);
+}
+.osm-hr-role-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.osm-hr-dot { flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; }
+.osm-hr-role-name { min-width: 0; overflow: hidden; font-weight: 600; white-space: nowrap; text-overflow: ellipsis; }
+.osm-hr-badge {
+    flex: 0 0 auto;
+    padding: 0 6px;
+    border-radius: 6px;
+    background: var(--bg-soft-200, #262a30);
+    color: var(--text-sub-600, #99a0ae);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 18px;
+}
+.osm-hr-badge.is-hidden { background: var(--state-warning-alpha-10, rgba(250,115,25,.14)); color: var(--state-warning-base, #fa7319); }
+.osm-hr-role-line { color: var(--text-sub-600, #99a0ae); font-size: 12px; line-height: 17px; overflow-wrap: anywhere; }
