@@ -20,6 +20,8 @@ PlumoseCore.definePlugin('hiddenRoles', (api) => {
         SPEAK_VOICE: 'Speak', MODIFY_COMMUNITY: 'Modify community', MODIFY_ROLES: 'Modify roles', REMOVE_MEMBERS: 'Remove members',
         ADD_REACTIONS: 'Add reactions', MODIFY_LINKED_STICKERS: 'Modify linked stickers',
     };
+    const BATCH = 50; // member records per request
+    const MAX_FETCH = 1000;
     const ICON_SHIELD = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>';
 
     /* ------------------------------------------------------------- data -- */
@@ -50,6 +52,44 @@ PlumoseCore.definePlugin('hiddenRoles', (api) => {
 
     function memberOf(cid, userId) {
         return api.client()?.members?.byCommunity?.get(big(cid))?.get(userId) || null;
+    }
+
+    /** Everyone in the member lists Osmium has loaded for this server's channels. */
+    function listedUserIds(cid) {
+        const client = api.client();
+        const lists = client?.members?.byChannel;
+        if (!lists || typeof lists.entries !== 'function') return [];
+        const ids = new Map();
+        for (const [channelId, entries] of lists.entries()) {
+            if (String(client.channels?.channels?.get(channelId)?.communityId) !== String(cid)) continue;
+            for (const entry of entries || []) {
+                const id = entry?.user?.user?.id;
+                if (id != null) ids.set(String(id), id);
+            }
+        }
+        return [...ids.values()];
+    }
+
+    /**
+     * A member list only carries names. Who holds which role is on the member
+     * record, which the app fetches one profile at a time (communities.GetMembers).
+     * This asks for the records of everyone in the loaded member lists, with the
+     * same request, in small batches.
+     */
+    async function loadMembers(cid, isCurrent) {
+        const store = api.client()?.members;
+        if (typeof store?.fetchMembers !== 'function') return;
+        const have = store.byCommunity?.get(big(cid));
+        const missing = listedUserIds(cid).filter((id) => !have?.has(id)).slice(0, MAX_FETCH);
+        for (let i = 0; i < missing.length && isCurrent(); i += BATCH) {
+            try {
+                await store.fetchMembers(big(cid), missing.slice(i, i + BATCH));
+            } catch (err) {
+                console.warn('[Plumose:hiddenRoles] member fetch failed', err);
+                return;
+            }
+            await new Promise((resolve) => setTimeout(resolve, 200));
+        }
     }
 
     /** Role IDs a member carries that have no role in the store. */
@@ -114,7 +154,8 @@ PlumoseCore.definePlugin('hiddenRoles', (api) => {
 
     /* --------------------------------------------------------- role list -- */
 
-    function roleRow({ name, color, badges, permissions, holders }) {
+    function roleRow({ name, color, badges, permissions, holders, total }) {
+        const hidden = badges.includes('Hidden');
         return h('div', { class: 'osm-hr-role' },
             h('div', { class: 'osm-hr-role-head' },
                 h('span', { class: 'osm-hr-dot', style: { background: color || 'var(--icon-soft-400, #717784)' } }),
@@ -123,8 +164,10 @@ PlumoseCore.definePlugin('hiddenRoles', (api) => {
             ),
             permissions && h('div', { class: 'osm-hr-role-line' }, permissions),
             h('div', { class: 'osm-hr-role-line' }, holders.length
-                ? `${holders.length} loaded member${holders.length === 1 ? '' : 's'}: ${holders.slice(0, 12).join(', ')}${holders.length > 12 ? '…' : ''}`
-                : 'No loaded members have it'),
+                ? `${holders.length} of ${total} loaded member${total === 1 ? '' : 's'}: ${holders.slice(0, 40).join(', ')}${holders.length > 40 ? '…' : ''}`
+                : hidden
+                    ? `None of the ${total} loaded members. Osmium’s server may be leaving this role off other people’s records.`
+                    : `None of the ${total} loaded members`),
         );
     }
 
@@ -148,6 +191,7 @@ PlumoseCore.definePlugin('hiddenRoles', (api) => {
                 badges: [isHidden(role) && 'Hidden', role.separated && 'Separated'].filter(Boolean),
                 permissions: api.settings.showPermissions !== false && (names.length ? names.map((n) => PERMISSION_LABELS[n] || n).join(' · ') : 'No permissions'),
                 holders: all.filter((m) => [...(m.roleIds || [])].includes(role.id)).map((m) => m.nickname || userName(m.id)),
+                total: all.length,
             });
         });
 
@@ -158,13 +202,14 @@ PlumoseCore.definePlugin('hiddenRoles', (api) => {
                 unknown.get(String(id)).push(m.nickname || userName(m.id));
             }
         }
-        const unknownRows = [...unknown].map(([id, holders]) => roleRow({ name: `Role ${id}`, badges: ['Unknown'], holders }));
+        const unknownRows = [...unknown].map(([id, holders]) => roleRow({ name: `Role ${id}`, badges: ['Unknown'], holders, total: all.length }));
 
         const hiddenCount = roles.filter(isHidden).length;
         el.replaceChildren(
             h('div', { class: 'osm-setting-desc' },
                 `${roles.length} role${roles.length === 1 ? '' : 's'}, ${hiddenCount} hidden, ${unknown.size} unknown. `
-                + `Members are the ones Osmium has loaded so far (${all.length}); scroll the member list to load more.`),
+                + `Holders are counted among the ${all.length} member${all.length === 1 ? '' : 's'} loaded so far: everyone in the member lists you’ve opened in this server. `
+                + 'Open a channel and scroll its member list to bring in more.'),
             known.length ? h('div', { class: 'osm-hr-list' }, known) : h('div', { class: 'osm-empty' }, 'Osmium hasn’t loaded this server’s roles yet. Try again in a moment.'),
             unknownRows.length > 0 && h('div', { class: 'osm-hr-section' }, 'Carried by members, but not in the role list'),
             unknownRows.length > 0 && h('div', { class: 'osm-hr-list' }, unknownRows),
@@ -197,6 +242,7 @@ PlumoseCore.definePlugin('hiddenRoles', (api) => {
                 view = null;
             },
         });
+        loadMembers(cid, () => !!view && communityId() === cid);
     }
 
     /** A shield button beside the server's search button, above the channel list. */
