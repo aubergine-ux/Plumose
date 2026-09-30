@@ -1,6 +1,6 @@
 # Plumose-Injector
 
-A Vencord-style client mod for the **official Osmium desktop app**, with a plugin system and four
+A Vencord-style client mod for the **official Osmium desktop app**, with a plugin system and five
 plugins:
 
 | Plugin | What it does |
@@ -9,6 +9,7 @@ plugins:
 | **Pop-out Chat** | Opens any chat in its own window, with an always-on-top pin. |
 | **Friend Presence Log** | Records friends coming online, going idle or offline, what they play or listen to, and status changes. Includes a "last seen" list. |
 | **Server Folders** | Groups servers in the left rail into collapsible, coloured folders. |
+| **Celebrity Blocked** | Blocked accounts show up under celebrity names (off by default). |
 
 It changes nothing inside Osmium's code. Like Vencord on Discord, it moves the official `app.asar`
 aside and puts a small loader in its place. The loader starts the mod and then boots the untouched
@@ -102,6 +103,17 @@ everyone's status at once then.
 A folder sits where its first server was in your server order. Osmium's own drag-to-reorder still
 works for servers outside folders.
 
+### Celebrity Blocked
+
+Off by default. Turn it on and everyone you've blocked shows up as a celebrity: Donald Trump, Kanye
+West, Taylor Swift and so on. Each account always gets the same name, and you can edit the list in
+the plugin's settings. By default their avatar is hidden too.
+
+Only your own client changes. It renames the in-memory copy of the user, so nothing is sent to
+Osmium and other people see the real names. Unblocking someone, or turning the plugin off, puts the
+real name and avatar back. Their @username stays real so mentions still work, and a server
+nickname still shows instead of the celebrity name in that server.
+
 ## Writing a plugin
 
 A plugin is a folder in `src/plugins/`:
@@ -173,6 +185,7 @@ src/plugins/*             the plugins
 - **Shuffle/repeat on the "This computer" Spotify source:** Spotify's Linux app reports both over MPRIS but ignores changes, so the buttons are hidden there.
 - **Spotify Web API source:** not yet tested against a live Spotify developer app.
 - **Windows and macOS:** the install paths are best guesses and untested. On macOS, editing the app bundle may trip Gatekeeper. On Windows, the Osmium installer replaces the whole folder on update, so run `install` again afterwards.
+- **Celebrity Blocked:** doesn't cover server nicknames, which Osmium shows ahead of the display name.
 - **Folders:** stored locally, so they don't sync to Osmium on other devices.
 
 ### Development
