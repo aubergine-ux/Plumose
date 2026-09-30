@@ -1,0 +1,199 @@
+/* The rail becomes a flex column so items can be reordered with `order`
+   without moving React's nodes. Items keep Osmium's own spacing (the icon's
+   12px bottom margin). */
+.osm-folders-rail { display: flex !important; flex-direction: column; }
+.osm-folders-rail > * { flex-shrink: 0; }
+.osm-folders-rail > a { display: block; }
+.osm-folders-rail > a[data-osm-folder-hidden] { display: none !important; }
+
+/* ------------------------------------------------------------ folder tile -- */
+
+.osm-folder {
+    --osm-folder-color: #7c6cf2;
+    flex: 0 0 auto;
+    position: relative;
+    width: 56px;
+    margin: 0 auto;
+    padding: 0 0 12px;
+    border-radius: 16px 16px 0 0;
+    cursor: pointer;
+    outline: none;
+}
+.osm-folder:first-child .osm-folder-face { margin-top: 12px; }
+
+.osm-folder-face {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--osm-folder-color) 22%, var(--bg-soft-200, #262a30));
+    color: var(--osm-folder-color);
+    transition: box-shadow .15s ease-out, background .15s, transform .15s;
+}
+.osm-folder:hover .osm-folder-face,
+.osm-folder:focus-visible .osm-folder-face {
+    box-shadow: 0 0 0 2px var(--bg-white-0, #0e0f11), 0 0 0 4px var(--focus-neutral, rgba(255,255,255,.3));
+}
+.osm-folder.is-drop .osm-folder-face {
+    box-shadow: 0 0 0 2px var(--bg-white-0, #0e0f11), 0 0 0 4px var(--osm-folder-color);
+    transform: scale(1.06);
+}
+
+/* Closed folder with previews: a 2×2 grid of its first servers. */
+.osm-folder-face.is-preview {
+    grid-template-columns: repeat(2, 18px);
+    grid-template-rows: repeat(2, 18px);
+    place-content: center;
+    gap: 3px;
+}
+.osm-folder-mini {
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    overflow: hidden;
+    border-radius: 6px;
+    background: var(--bg-sub-300, #30343b);
+    color: var(--text-strong-950, #f5f7fa);
+    font-size: 9px;
+    font-weight: 600;
+}
+.osm-folder-mini img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+/* The same unread dot and active pill Osmium uses on server icons. */
+.osm-folder-badge {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--icon-disabled-300, #525866);
+    box-shadow: 0 0 0 3px var(--surface-container-50, #0b0c0e);
+}
+.osm-folder-badge.is-mention { background: var(--state-error-base, #fb3748); }
+.osm-folder-face.is-active::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: -11px;
+    width: 3px;
+    height: 32px;
+    border-radius: 12px;
+    background: #fff;
+}
+
+/* Open folder: the tile and its servers share one tinted panel. */
+.osm-folder.is-open { background: color-mix(in srgb, var(--osm-folder-color) 14%, transparent); padding-top: 4px; }
+.osm-folder.is-open .osm-folder-face { background: transparent; }
+.osm-folders-rail > a[data-osm-folder]:not([data-osm-folder-hidden]) {
+    width: 56px;
+    margin: 0 auto;
+    background: color-mix(in srgb, var(--osm-folder-color) 14%, transparent);
+}
+.osm-folders-rail > a[data-osm-folder-last]:not([data-osm-folder-hidden]) {
+    margin-bottom: 12px;
+    padding-bottom: 4px;
+    border-radius: 0 0 16px 16px;
+}
+.osm-folders-rail > a[data-osm-folder-last]:not([data-osm-folder-hidden]) > div { margin-bottom: 0; }
+/* Osmium's active-server pill sits 7px left of the icon; nudge it out of the panel. */
+.osm-folders-rail > a[data-osm-folder] [class*="selected-"]::after { left: -11px; }
+
+.osm-folder-new { flex: 0 0 auto; }
+
+/* ------------------------------------------------------------ menu -- */
+
+.osm-folder-menu {
+    position: fixed;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    padding: 6px;
+    border: 1px solid var(--stroke-soft-200, #2b303b);
+    border-radius: 12px;
+    background: var(--bg-white-0, #0e0f11);
+    box-shadow: 0 16px 40px -8px rgba(0, 0, 0, .5);
+    font-size: 13px;
+    animation: osm-fade .12s ease-out;
+}
+.osm-folder-menu-title {
+    padding: 6px 10px 4px;
+    color: var(--text-soft-400, #717784);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+}
+.osm-folder-menu-item {
+    padding: 7px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: var(--text-strong-950, #f5f7fa);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+.osm-folder-menu-item:hover { background: var(--bg-soft-200, #262a30); }
+.osm-folder-menu-item.is-danger { color: var(--state-error-base, #fb3748); }
+.osm-folder-menu-item.is-danger:hover { background: var(--state-error-alpha-10, rgba(251,55,72,.1)); }
+
+.osm-folder-swatches { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 10px; }
+.osm-folder-swatches.is-large { padding: 0; gap: 8px; }
+.osm-folder-swatch {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform .1s;
+}
+.osm-folder-swatches.is-large .osm-folder-swatch { width: 24px; height: 24px; }
+.osm-folder-swatch:hover { transform: scale(1.15); }
+.osm-folder-swatch.is-on { box-shadow: 0 0 0 2px var(--bg-white-0, #0e0f11), 0 0 0 4px var(--text-strong-950, #f5f7fa); }
+
+/* ------------------------------------------------------------ editor -- */
+
+.osm-folder-modal { width: min(460px, 100%); }
+.osm-folder-editor { display: flex; flex-direction: column; gap: 12px; }
+.osm-folder-picker {
+    display: flex;
+    flex-direction: column;
+    max-height: 340px;
+    overflow: auto;
+    border: 1px solid var(--stroke-soft-200, #2b303b);
+    border-radius: 10px;
+    padding: 4px;
+}
+.osm-folder-pick {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.osm-folder-pick:hover { background: var(--bg-weak-50, #1a1c20); }
+.osm-folder-pick input { margin: 0; accent-color: var(--primary-base, #1db954); width: 16px; height: 16px; }
+.osm-folder-pick-icon {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--bg-soft-200, #262a30);
+    font-size: 12px;
+    font-weight: 600;
+}
+.osm-folder-pick-icon img { width: 100%; height: 100%; object-fit: cover; }
+.osm-folder-pick-name { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 13px; }
+.osm-folder-pick-note { flex: 0 0 auto; color: var(--text-soft-400, #717784); font-size: 11px; }
+.osm-folder-actions { display: flex; align-items: center; gap: 8px; }
