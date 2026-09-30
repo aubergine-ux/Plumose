@@ -1,0 +1,22 @@
+.osm-cs-modal { width: min(420px, 100%); }
+.osm-cs { display: flex; flex-direction: column; gap: 12px; }
+.osm-cs-duration { width: auto; flex: 0 0 auto; }
+
+.osm-cs-recent { display: flex; flex-wrap: wrap; gap: 6px; }
+.osm-cs-chip {
+    max-width: 100%;
+    overflow: hidden;
+    padding: 3px 10px;
+    border: 1px solid var(--stroke-soft-200, #2b303b);
+    border-radius: 12px;
+    background: none;
+    color: var(--text-sub-600, #99a0ae);
+    font: inherit;
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+.osm-cs-chip:hover { border-color: var(--primary-base, #1db954); color: var(--text-strong-950, #f5f7fa); }
+
+.osm-cs-actions { display: flex; align-items: center; gap: 8px; }
