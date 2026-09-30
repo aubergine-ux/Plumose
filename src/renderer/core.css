@@ -163,6 +163,15 @@
 }
 .osm-input:focus, .osm-select:focus { outline: none; border-color: var(--primary-base, #1db954); }
 .osm-input-number { width: 96px; flex: 0 0 auto; }
+textarea.osm-input {
+    min-height: 180px;
+    resize: vertical;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px;
+    line-height: 18px;
+    tab-size: 4;
+    white-space: pre;
+}
 .osm-select option { background: var(--bg-white-0, #0e0f11); }
 
 .osm-button {

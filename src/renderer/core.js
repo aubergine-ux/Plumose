@@ -318,7 +318,7 @@
 
     function refreshModsModal() {
         // Don't rebuild while someone is typing into a field in it.
-        if (!modsModal || modsModal.content.contains(document.activeElement) && document.activeElement.matches('input[type=text], input[type=number]')) return;
+        if (!modsModal || modsModal.content.contains(document.activeElement) && document.activeElement.matches('input[type=text], input[type=number], textarea')) return;
         renderMods();
     }
 
