@@ -43,10 +43,24 @@ PlumoseCore.definePlugin('hiddenChannels', (api) => {
         }
     };
 
+    /** Channel IDs the app actually drew in the sidebar (excludes our own rows). */
+    function renderedIds(scroller, cid) {
+        const ids = new Set();
+        for (const link of scroller.querySelectorAll(`a[href^="/${cid}/"]:not(.osm-hc-row)`)) {
+            const id = link.getAttribute('href').split('/')[2];
+            if (id) ids.add(id);
+        }
+        return ids;
+    }
+
     /** Channels of this server the app holds but won't draw. */
-    function hiddenChannels(cid) {
-        const hidden = values(api.client()?.channels?.channels)
-            .filter((c) => c && String(c.communityId) === cid && !c.isCategory && !c.isVisible)
+    function hiddenChannels(cid, scroller) {
+        const all = values(api.client()?.channels?.channels)
+            .filter((c) => c && String(c.communityId) === cid && !c.isCategory);
+        if (!all.length) { try { return unlistedVoiceRooms(cid); } catch { return []; } }
+        const drawn = renderedIds(scroller, cid);
+        const hidden = all
+            .filter((c) => drawn.size > 0 ? !drawn.has(String(c.id)) : c.isVisible === false)
             .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
         try { return [...hidden, ...unlistedVoiceRooms(cid)]; } catch { return hidden; }
     }
@@ -70,10 +84,15 @@ PlumoseCore.definePlugin('hiddenChannels', (api) => {
     function counts(cid) {
         const all = values(api.client()?.channels?.channels)
             .filter((c) => c && String(c.communityId) === cid && !c.isCategory);
+        const scroller = scrollerFor();
+        const drawn = scroller ? renderedIds(scroller, cid) : new Set();
+        const hiddenCount = drawn.size > 0
+            ? all.filter((c) => !drawn.has(String(c.id))).length
+            : all.filter((c) => c.isVisible === false).length;
         return {
             loaded: all.length > 0,
             total: all.length,
-            hidden: all.filter((c) => !c.isVisible).length,
+            hidden: hiddenCount,
             voiceOnly: (() => { try { return unlistedVoiceRooms(cid).length; } catch { return 0; } })(),
         };
     }
@@ -176,7 +195,7 @@ PlumoseCore.definePlugin('hiddenChannels', (api) => {
             return;
         }
 
-        const hidden = hiddenChannels(cid);
+        const hidden = hiddenChannels(cid, scroller);
         const inline = api.settings.placement !== 'section';
         const targets = inline ? categoryTargets(scroller, cid) : new Map();
         const parentKey = (c) => (c.parentId != null ? String(c.parentId) : 'none');
