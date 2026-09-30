@@ -1,8 +1,8 @@
 {
   "name": "plumose-injector",
   "displayName": "Plumose-Injector",
-  "version": "1.1.0",
-  "description": "A Vencord-style client mod for the official Osmium desktop app: plugins for Spotify controls, pop-out chats, a friend presence log and server folders.",
+  "version": "1.2.0",
+  "description": "A Vencord-style client mod for the official Osmium desktop app: plugins for music controls, pop-out chats, a friend presence log, server folders, hidden channels and roles, and more.",
   "private": true,
   "type": "commonjs",
   "scripts": {

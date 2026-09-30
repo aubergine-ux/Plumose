@@ -1,34 +1,63 @@
-# Plumose-Injector
+<div align="center">
 
-A Vencord-style client mod for the **official Osmium desktop app**, with a plugin system and five
-plugins:
+<img src="assets/banner.svg" alt="Plumose-Injector: a plugin-based client mod for the Osmium desktop app" width="100%" />
 
-| Plugin | What it does |
-| --- | --- |
-| **Spotify Controls** | Now playing, seek, skip and volume, docked above your account card. |
-| **Pop-out Chat** | Opens any chat in its own window, with an always-on-top pin. |
-| **Friend Presence Log** | Records friends coming online, going idle or offline, what they play or listen to, and status changes. Includes a "last seen" list. |
-| **Server Folders** | Groups servers in the left rail into collapsible, coloured folders. |
-| **Celebrity Blocked** | Blocked accounts show up under celebrity names (off by default). |
+[![Osmium Client Mod](https://img.shields.io/badge/Osmium-Client%20Mod-FFB6D9?style=for-the-badge&labelColor=FFD6EC)](https://github.com/aubergine-ux/Plumose)
+[![Version](https://img.shields.io/badge/Version-1.2.0-C9A7FF?style=for-the-badge&labelColor=E5D4FF)](package.json)
+[![License: MIT](https://img.shields.io/badge/License-MIT-A9C9FF?style=for-the-badge&labelColor=D6E4FF)](LICENSE)
+[![Plugins](https://img.shields.io/badge/Plugins-12-FFCBA4?style=for-the-badge&labelColor=FFE3C7)](#plugins)
 
-It changes nothing inside Osmium's code. Like Vencord on Discord, it moves the official `app.asar`
-aside and puts a small loader in its place. The loader starts the mod and then boots the untouched
-official app.
+![JavaScript](https://img.shields.io/badge/JavaScript-No%20build%20step-A7C7FF?style=flat&logo=javascript&logoColor=1B3A6B&labelColor=D6E8FF)
+![Node](https://img.shields.io/badge/Node-18%2B-B8E6B8?style=flat&logo=nodedotjs&logoColor=1F5C1F&labelColor=E0F5E0)
+![Platform](https://img.shields.io/badge/Tested%20on-Linux-B8E6B8?style=flat&logo=linux&logoColor=1F5C1F&labelColor=E0F5E0)
+![Third-Party](https://img.shields.io/badge/Third--Party-Not%20affiliated%20with%20Osmium-D8D8D8?style=flat&labelColor=F5F5F5)
 
-The mod calls itself **Plumose-Injector V&lt;version&gt;** (for example `Plumose-InjectorV1.1.0`).
+</div>
+
+A Vencord-style client mod for the **official Osmium desktop app**, with a plugin system and twelve
+plugins. It changes nothing inside Osmium's code. Like Vencord on Discord, it moves the official
+`app.asar` aside and puts a small loader in its place. The loader starts the mod and then boots the
+untouched official app.
+
+The mod calls itself **Plumose-Injector V&lt;version&gt;** (for example `Plumose-InjectorV1.2.0`).
 The version comes from `package.json`.
 
-## Install
+---
+
+## Plugins
+
+| Plugin | What it does | Default |
+| --- | --- | :---: |
+| 🎵 **[Music Controls](#music-controls)** | Now playing, seek, skip and volume, docked above your account card. | On |
+| 🪟 **[Pop-out Chat](#pop-out-chat)** | Opens any chat in its own window, with an always-on-top pin. | On |
+| 🕒 **[Friend Presence Log](#friend-presence-log)** | Records friends coming online, going idle or offline, and what they play or listen to. | On |
+| 📁 **[Server Folders](#server-folders)** | Groups servers in the left rail into collapsible, coloured folders. | On |
+| 🛡️ **[Show Hidden Roles](#show-hidden-roles)** | Marks non-public roles on profiles and lists every role a server has. | On |
+| 🔒 **[Show Hidden Channels](#show-hidden-channels)** | Lists channels you can't open, with their name and topic. | Off |
+| ⚡ **[Quick Switcher](#quick-switcher)** | Ctrl+K to jump to any chat, channel or server. | Off |
+| 🎧 **[Voice Overview](#voice-overview)** | Everyone in voice across your servers, in one list. | Off |
+| 🤫 **[Silent Typing](#silent-typing)** | Stops Osmium telling others when you're typing. | Off |
+| 🙈 **[Privacy Blur](#privacy-blur)** | Blurs messages, names and pictures until you point at them. | Off |
+| 🎨 **[Custom CSS](#custom-css)** | Your own CSS, applied as you type. | Off |
+| 🎭 **[Celebrity Blocked](#celebrity-blocked)** | Blocked accounts show up under celebrity names. | Off |
+
+Turn plugins on and off from the **Plumose** screen (the puzzle-piece button on your account card).
+Changes apply instantly, with no restart.
+
+---
+
+<details open>
+<summary><h2>📦 Install</h2></summary>
 
 Needs Node 18+. Osmium lives in a root-owned folder, so on Linux use sudo:
 
 ```sh
+git clone https://github.com/aubergine-ux/Plumose
+cd Plumose
 sudo node scripts/install.js install      # finds /opt/osmium automatically
 ```
 
-Then fully quit Osmium (including the tray icon) and start it again. A puzzle-piece button on your
-account card opens the **Plumose** screen, where you turn plugins on and off and change their
-settings. Changes apply instantly, with no restart.
+Then fully quit Osmium (including the tray icon) and start it again.
 
 Other commands:
 
@@ -54,13 +83,21 @@ sudo node scripts/install.js pacman-hook
 That writes `/etc/pacman.d/hooks/plumose-injector.hook`, which re-injects after every `osmium`
 upgrade. Delete the file to turn it off.
 
-## Plugins
+</details>
 
-### Spotify Controls
+---
+
+## Plugin guide
+
+<details>
+<summary><h3>🎵 Music Controls</h3></summary>
+
+<a name="music-controls"></a>
 
 Album art, title and artist (click either to open the track in Spotify), a seek bar, previous,
 play/pause, next, and volume (scroll over it to nudge). The panel hides itself when nothing is
-playing and uses Osmium's theme colours.
+playing and uses Osmium's theme colours. It was called Spotify Controls before 1.2.0; its settings
+carry over.
 
 Hover the panel and click its sliders icon, or open it in the Plumose screen, to pick a source:
 
@@ -69,7 +106,12 @@ Hover the panel and click its sliders icon, or open it in the Plumose screen, to
 
 Placement (docked or a draggable floating card), compact mode, and show-when-idle are in the same place.
 
-### Pop-out Chat
+</details>
+
+<details>
+<summary><h3>🪟 Pop-out Chat</h3></summary>
+
+<a name="pop-out-chat"></a>
 
 - The pop-out button in a chat's header opens that chat in its own window. **Shift+click** or **middle-click** a chat in the sidebar does the same.
 - In a pop-out, the pin button keeps it on top of other windows, and the dock button sends you back to the main window on that chat.
@@ -80,7 +122,12 @@ identity as the main window. It deliberately does *not* take over things that be
 window: now-playing and game detection, global keybinds (push-to-talk), the unread badge, deep links
 and message notifications. Those all stay with the main window.
 
-### Friend Presence Log
+</details>
+
+<details>
+<summary><h3>🕒 Friend Presence Log</h3></summary>
+
+<a name="friend-presence-log"></a>
 
 Open it from the clock button on your account card.
 
@@ -93,7 +140,12 @@ Settings let you skip idle/back entries or activities, include everyone you shar
 in your Osmium profile. The first 15 seconds after startup aren't logged, because Osmium syncs
 everyone's status at once then.
 
-### Server Folders
+</details>
+
+<details>
+<summary><h3>📁 Server Folders</h3></summary>
+
+<a name="server-folders"></a>
 
 - The folder button at the bottom of the server rail creates a folder: pick a name, a colour and its servers.
 - Drag a server onto a folder to add it.
@@ -103,7 +155,103 @@ everyone's status at once then.
 A folder sits where its first server was in your server order. Osmium's own drag-to-reorder still
 works for servers outside folders.
 
-### Celebrity Blocked
+</details>
+
+<details>
+<summary><h3>🛡️ Show Hidden Roles</h3></summary>
+
+<a name="show-hidden-roles"></a>
+
+A role in Osmium can be set to not *public*. Osmium's app never points that out, and it silently
+drops any role ID on a member that it has no role for. This plugin shows both:
+
+- **On profiles:** non-public roles get a dashed outline and an eye-off mark. Role IDs the member carries that Osmium doesn't draw are listed underneath.
+- **Server role list:** the shield button above the channel list opens every role Osmium holds for that server, with its colour, whether it's hidden or separated, what it grants, and which loaded members have it. Role IDs that members carry but that aren't in the role list get their own section.
+
+It only reads what Osmium has already loaded. A role the server keeps back entirely stays unknown,
+and members are only the ones Osmium has loaded so far.
+
+</details>
+
+<details>
+<summary><h3>🔒 Show Hidden Channels</h3></summary>
+
+<a name="show-hidden-channels"></a>
+
+Off by default. Osmium's app receives a server's channel list and then hides the channels you lack
+*View Channel* on. This plugin draws those too, with a lock, dimmed, at the end of their category
+(or in one section at the bottom, if you prefer).
+
+Click a hidden channel for its name, type, category, topic and, for voice channels, who's in it.
+**You can't read its messages.** The server checks that, and the plugin doesn't try to get round it.
+
+</details>
+
+<details>
+<summary><h3>⚡ Quick Switcher</h3></summary>
+
+<a name="quick-switcher"></a>
+
+Off by default. Press **Ctrl+K** (Cmd+K on macOS) and type part of a name. ↑ and ↓ move, Enter
+opens, Esc closes. Start with `@` for chats only, `#` for channels or `*` for servers. With nothing
+typed, chats and channels with unread messages come first.
+
+Channels are listed for servers you've opened this session, because that's when Osmium loads them.
+
+</details>
+
+<details>
+<summary><h3>🎧 Voice Overview</h3></summary>
+
+<a name="voice-overview"></a>
+
+Off by default. The headphones button on your account card opens one live list of every voice call
+Osmium knows about, across servers and chats: who's in it, and who's muted, deafened, on camera or
+sharing their screen. Calls with friends in them come first. Click a call to open its channel; that
+doesn't join it.
+
+</details>
+
+<details>
+<summary><h3>🤫 Silent Typing</h3></summary>
+
+<a name="silent-typing"></a>
+
+Off by default. Osmium stops sending "is typing" for you, in the main window and in pop-outs. You
+still see other people typing.
+
+</details>
+
+<details>
+<summary><h3>🙈 Privacy Blur</h3></summary>
+
+<a name="privacy-blur"></a>
+
+Off by default. Blurs message text and media, names, profile pictures and chat-list previews until
+you point at them. **Ctrl+Shift+B** switches the blur on and off. Settings choose which parts blur,
+how strongly, and whether to blur only while Osmium isn't the focused window.
+
+</details>
+
+<details>
+<summary><h3>🎨 Custom CSS</h3></summary>
+
+<a name="custom-css"></a>
+
+Off by default. Open the plugin's settings in the Plumose screen and type CSS; it applies as you
+type and saves when you pause. Osmium's class names end in a hash that changes every build, so match
+on the part before it:
+
+```css
+[class*="channelListItem-"] { border-radius: 4px; }
+```
+
+</details>
+
+<details>
+<summary><h3>🎭 Celebrity Blocked</h3></summary>
+
+<a name="celebrity-blocked"></a>
 
 Off by default. Turn it on and everyone you've blocked shows up as a celebrity: Donald Trump, Kanye
 West, Taylor Swift and so on. Each account always gets the same name, and you can edit the list in
@@ -114,15 +262,20 @@ Osmium and other people see the real names. Unblocking someone, or turning the p
 real name and avatar back. Their @username stays real so mentions still work, and a server
 nickname still shows instead of the celebrity name in that server.
 
-## Writing a plugin
+</details>
+
+---
+
+<details>
+<summary><h2>🧩 Writing a plugin</h2></summary>
 
 A plugin is a folder in `src/plugins/`:
 
 ```
 src/plugins/myPlugin/
-    index.js      required: name, description, settings schema, optional main-process part
-    renderer.js   optional: runs in Osmium's page
-    style.css     optional: applied only while the plugin is on
+├── index.js      required: name, description, settings schema, optional main-process part
+├── renderer.js   optional: runs in Osmium's page
+└── style.css     optional: applied only while the plugin is on
 ```
 
 ```js
@@ -130,6 +283,7 @@ src/plugins/myPlugin/
 module.exports = {
     name: 'My Plugin',
     description: 'Shown in the Plumose screen.',
+    enabledByDefault: true,     // false = the user switches it on
     popout: false,              // also run the page part in pop-out chat windows?
     settings: {
         greeting: { type: 'string', default: 'hi', label: 'Greeting' },
@@ -162,7 +316,10 @@ events sent with `ctx.emit()`, and `api.client()`, which returns Osmium's own Mo
 `status()`. In the main process, `ctx` provides `readData`/`writeData` for JSON files and
 `readSecret`/`writeSecret` for keyring-encrypted values.
 
-## How it works
+</details>
+
+<details>
+<summary><h2>⚙️ How it works</h2></summary>
 
 ```
 scripts/install.js        moves app.asar → _app.asar, writes resources/app/{index.js,package.json}
@@ -177,18 +334,26 @@ src/plugins/*             the plugins
 - In Osmium's Electron build, `app.asar` takes priority over an `app/` folder. That's why the installer moves the original aside rather than just adding a folder.
 - The mod's preload is added with `session.registerPreloadScript`, so it runs **alongside** Osmium's own preload. `contextIsolation` and the sandbox stay on. Only top-level `*.osmium.chat` frames get the bridge, and the main process rejects IPC from anywhere else.
 - Osmium's CSS-module class names carry a hash that changes every build (`userInfoContainer-m5w2Fz`), so everything is found by class prefix (`[class*="userInfoContainer-"]`). One shared MutationObserver lets plugins re-apply their changes whenever React re-renders.
-- Osmium's state lives in MobX stores. The presence log subscribes to MobX's own change events on user objects, rather than decoding network traffic or patching minified functions.
+- Osmium's state lives in MobX stores. The presence log subscribes to MobX's own change events on user objects, rather than decoding network traffic or patching minified functions. The hidden channel, hidden role, quick switcher and voice overview plugins read the same stores and send nothing the app wouldn't send itself.
 - Osmium's session token is tied to the desktop client's identity (`OsmiumNative.clientInfo`). Pop-outs therefore get a stand-in `OsmiumNative` carrying the same identity, with the main-window-only features stubbed out.
 
-### Known limitations
+</details>
 
-- **Shuffle/repeat on the "This computer" Spotify source:** Spotify's Linux app reports both over MPRIS but ignores changes, so the buttons are hidden there.
+<details>
+<summary><h2>⚠️ Known limitations</h2></summary>
+
+- **Plugins added in 1.2.0** (hidden roles, hidden channels, quick switcher, voice overview, silent typing, privacy blur, custom CSS): written from Osmium's web bundle and checked against a simulated page, not yet against a live session. If one misbehaves, switch it off in the Plumose screen.
+- **Show Hidden Channels / Roles:** they show what Osmium's app already holds. If the server stops sending channels or roles you can't see, there is nothing to show.
+- **Shuffle/repeat on the "This computer" music source:** Spotify's Linux app reports both over MPRIS but ignores changes, so the buttons are hidden there.
 - **Spotify Web API source:** not yet tested against a live Spotify developer app.
 - **Windows and macOS:** the install paths are best guesses and untested. On macOS, editing the app bundle may trip Gatekeeper. On Windows, the Osmium installer replaces the whole folder on update, so run `install` again afterwards.
 - **Celebrity Blocked:** doesn't cover server nicknames, which Osmium shows ahead of the display name.
 - **Folders:** stored locally, so they don't sync to Osmium on other devices.
 
-### Development
+</details>
+
+<details>
+<summary><h2>🛠️ Development</h2></summary>
 
 Edits to `src/renderer/*` and `src/plugins/*/renderer.js|style.css` apply when the page reloads.
 Edits to main-process files need an Osmium restart. To try changes without touching your real
@@ -200,3 +365,13 @@ OSMIUM_MOD_USER_DATA=/tmp/osmium-dev /opt/osmium/osmium --remote-debugging-port=
 
 Then attach Chrome DevTools at `chrome://inspect` (port 9333). Logs are prefixed `[Plumose]`, and
 `PlumoseCore.status()` lists the plugins and whether they're running.
+
+</details>
+
+---
+
+<div align="center">
+
+Released under the [MIT License](LICENSE). Not affiliated with or endorsed by Osmium.
+
+</div>

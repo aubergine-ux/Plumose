@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300" role="img" aria-label="Plumose-Injector: a client mod for Osmium">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b1430"/>
+      <stop offset="1" stop-color="#2a1b3d"/>
+    </linearGradient>
+    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffb6d9"/>
+      <stop offset=".5" stop-color="#c9a7ff"/>
+      <stop offset="1" stop-color="#a9c9ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="300" rx="28" fill="url(#bg)"/>
+  <g fill="none" stroke="url(#ink)" stroke-linecap="round" opacity=".6" transform="translate(-72 0)">
+    <!-- a feather, for "plumose" -->
+    <path d="M150 232 C190 170 250 110 330 70" stroke-width="4"/>
+    <path d="M178 196 C170 170 176 148 192 130 M204 168 C196 142 204 120 222 104 M232 142 C226 118 236 98 254 86 M262 118 C258 98 268 82 286 74" stroke-width="3"/>
+    <path d="M178 196 C204 200 226 194 244 180 M204 168 C230 172 252 164 270 150 M232 142 C256 144 278 136 294 122 M262 118 C284 118 302 110 316 98" stroke-width="3"/>
+  </g>
+  <text x="648" y="150" text-anchor="middle" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="76" font-weight="800" fill="url(#ink)">Plumose-Injector</text>
+  <text x="648" y="204" text-anchor="middle" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="26" font-weight="500" fill="#d9cfee">A plugin-based client mod for the Osmium desktop app</text>
+</svg>
