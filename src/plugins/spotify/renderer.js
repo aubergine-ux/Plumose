@@ -1,5 +1,5 @@
 /*
- * Spotify controls. Docked mode puts the player inside the account card's
+ * Music controls (plugin id: spotify). Docked mode puts the player inside the account card's
  * container at the bottom of the sidebar, tucked behind the card the same way
  * Osmium's own voice-status strip is.
  */
@@ -71,7 +71,7 @@ PlumoseCore.definePlugin('spotify', (api) => {
     ui.titleBox = h('button', { class: 'osm-sp-title', type: 'button', title: 'Open in Spotify', onclick: () => openTrack() }, ui.title);
     ui.sub = h('span');
     ui.subBox = h('div', { class: 'osm-sp-sub' }, ui.sub);
-    ui.gear = iconButton('settings', 'Spotify controls settings', (e) => toggleSettings(e.currentTarget), 'osm-sp-gear');
+    ui.gear = iconButton('settings', 'Music controls settings', (e) => toggleSettings(e.currentTarget), 'osm-sp-gear');
 
     ui.elapsed = h('span', { class: 'osm-sp-time' });
     ui.duration = h('span', { class: 'osm-sp-time' });
@@ -99,7 +99,7 @@ PlumoseCore.definePlugin('spotify', (api) => {
 
     ui.message = h('div', { class: 'osm-sp-message' });
 
-    ui.root = h('div', { id: 'plumose-spotify', class: 'osm-sp', role: 'region', 'aria-label': 'Spotify controls' },
+    ui.root = h('div', { id: 'plumose-spotify', class: 'osm-sp', role: 'region', 'aria-label': 'Music controls' },
         h('div', { class: 'osm-sp-main' },
             ui.artBtn,
             h('div', { class: 'osm-sp-meta' }, ui.titleBox, ui.subBox),
@@ -329,7 +329,7 @@ PlumoseCore.definePlugin('spotify', (api) => {
 
     function toggleSettings(anchor) {
         if (popover) return closeSettings();
-        popover = h('div', { class: 'osm-sp-popover', role: 'dialog', 'aria-label': 'Spotify controls settings' });
+        popover = h('div', { class: 'osm-sp-popover', role: 'dialog', 'aria-label': 'Music controls settings' });
         document.body.append(popover);
         buildSettings(popover, true);
         const r = anchor.getBoundingClientRect();
@@ -368,7 +368,7 @@ PlumoseCore.definePlugin('spotify', (api) => {
         const body = [];
 
         if (withTitle) {
-            body.push(h('div', { class: 'osm-sp-pop-title' }, 'Spotify controls',
+            body.push(h('div', { class: 'osm-sp-pop-title' }, 'Music controls',
                 h('button', { type: 'button', class: 'osm-sp-link', onclick: () => { closeSettings(); PlumoseCore.openMods(); } }, 'All mods')));
         }
 

@@ -17,7 +17,7 @@ function openSpotifyLink(raw, preferApp) {
 }
 
 module.exports = {
-    name: 'Spotify Controls',
+    name: 'Music Controls',
     description: 'Now playing, seek, skip and volume, above your account card.',
     settings: {
         backend: {
