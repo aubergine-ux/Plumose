@@ -84,6 +84,30 @@ PlumoseCore.definePlugin('avatarViewer', (api) => {
         return true;
     }
 
+    /* ------------------------------------------------- profile button -- */
+
+    function mountProfileButtons() {
+        if (api.settings.profileButton === false) return;
+        for (const card of document.querySelectorAll('[class*="userProfileWrapper-"]')) {
+            if (card.querySelector('.osm-av-profile-btn')) continue;
+            const holder = card.querySelector(HOLDER);
+            if (!holder?.querySelector('img')?.src) continue;
+            const anchor = holder.parentElement || holder;
+            anchor.classList.add('osm-av-anchor');
+            anchor.append(h('button', {
+                type: 'button', class: 'osm-av-profile-btn',
+                'aria-label': 'View avatar', title: 'View avatar',
+                html: ICON_IMAGE.replace('width="18" height="18"', 'width="14" height="14"'),
+                onclick: (e) => { e.stopPropagation(); open(holder); },
+            }));
+        }
+    }
+
+    function clearProfileButtons() {
+        document.querySelectorAll('.osm-av-profile-btn').forEach((el) => el.remove());
+        document.querySelectorAll('.osm-av-anchor').forEach((el) => el.classList.remove('osm-av-anchor'));
+    }
+
     /* ---------------------------------------------------- server button -- */
 
     function communityId() {
@@ -121,13 +145,17 @@ PlumoseCore.definePlugin('avatarViewer', (api) => {
             document.addEventListener('click', onClick, true);
             api.track(() => document.removeEventListener('click', onClick, true));
             if (!api.isPopout) api.onDom(mountButton);
+            api.onDom(mountProfileButtons);
         },
         stop() {
             view?.close();
             document.querySelectorAll('.osm-av-btn').forEach((el) => el.remove());
+            clearProfileButtons();
         },
         onSettings() {
             if (!api.isPopout) mountButton();
+            if (api.settings.profileButton === false) clearProfileButtons();
+            else mountProfileButtons();
         },
     };
 });

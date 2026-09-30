@@ -40,6 +40,7 @@ PlumoseCore.definePlugin('hiddenRoles', (api) => {
         }
     };
     const isHidden = (role) => role?.public === false;
+    const values = (coll) => (coll && typeof coll.values === 'function' ? [...coll.values()] : []);
     const userName = (id) => {
         const u = api.client()?.users?.users?.get(id);
         return u?.name || u?.username || `User ${id}`;
@@ -51,7 +52,9 @@ PlumoseCore.definePlugin('hiddenRoles', (api) => {
     }
 
     function memberOf(cid, userId) {
-        return api.client()?.members?.byCommunity?.get(big(cid))?.get(userId) || null;
+        const map = api.client()?.members?.byCommunity?.get(big(cid));
+        if (!map || userId == null) return null;
+        return map.get(userId) || map.get(big(userId)) || null;
     }
 
     /** Everyone in the member lists Osmium has loaded for this server's channels. */
@@ -95,7 +98,8 @@ PlumoseCore.definePlugin('hiddenRoles', (api) => {
     /** Role IDs a member carries that have no role in the store. */
     function unknownRoleIds(member) {
         const roles = api.client()?.roles;
-        return [...(member?.roleIds || [])].filter((id) => !roles?.get(id));
+        if (typeof roles?.get !== 'function') return [];
+        return [...(member?.roleIds || [])].filter((id) => !roles.get(id));
     }
 
     /* ---------------------------------------------------------- profiles -- */
@@ -113,7 +117,7 @@ PlumoseCore.definePlugin('hiddenRoles', (api) => {
         for (const card of document.querySelectorAll('[class*="userProfileWrapper-"]')) {
             const username = card.querySelector('p[class*="username-"]')?.textContent?.replace(/^@/, '').trim();
             const member = on && cid && username ? memberOf(cid, userByUsername(username)?.id) : null;
-            const hidden = member ? [...(member.roles || [])].filter(isHidden).map((r) => r.name) : [];
+            const hidden = member ? values(member.roles).filter(isHidden).map((r) => r.name) : [];
             const unknown = member ? unknownRoleIds(member).map(String) : [];
 
             // Only touch the card when what it should show has changed.

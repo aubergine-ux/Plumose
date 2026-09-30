@@ -55,3 +55,13 @@
     text-transform: uppercase;
 }
 .osm-hc-detail-value { overflow-wrap: anywhere; white-space: pre-wrap; }
+
+/* The read-out in the plugin's settings. */
+.osm-hc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+    border: 1px dashed var(--stroke-soft-200, #2b303b);
+    border-radius: 8px;
+}

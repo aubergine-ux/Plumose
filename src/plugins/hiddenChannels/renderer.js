@@ -1,8 +1,10 @@
 /*
- * Show hidden channels. Osmium's GetChannels reply carries a server's channels,
- * and the web app decides what to draw: every channel has an `isVisible` getter
- * (owner, ADMINISTRATOR, or VIEW_CHANNEL after the channel's overrides) and the
- * channel list filters on it. This plugin draws the ones that filter drops.
+ * Show hidden channels. The web app decides what to draw from the channels it
+ * holds: every channel has an `isVisible` getter (owner, ADMINISTRATOR, or
+ * VIEW_CHANNEL after the channel's overrides) and the channel list filters on
+ * it. This plugin draws the ones that filter drops. Whether there are any
+ * depends on the server: if its GetChannels reply leaves out what you can't
+ * view, the store has nothing hidden, and renderInfo() says so.
  *
  * Only what the client already holds is shown: name, type, topic, category and
  * voice participants. Message history is checked by the server, so a hidden
@@ -32,6 +34,7 @@ PlumoseCore.definePlugin('hiddenChannels', (api) => {
     }
 
     const isVoice = (c) => c.type === 1 || c.type === 'VOICE';
+    const values = (coll) => (coll && typeof coll.values === 'function' ? [...coll.values()] : []);
     const channelById = (id) => {
         try {
             return api.client()?.channels?.channels?.get(BigInt(id)) || null;
@@ -46,8 +49,38 @@ PlumoseCore.definePlugin('hiddenChannels', (api) => {
         try {
             list = api.client()?.channels?.byCommunity?.get(BigInt(cid));
         } catch {}
-        if (!list) return [];
-        return [...list].filter((c) => c && !c.isCategory && !c.isVisible).sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+        const held = values(list).filter((c) => c && !c.isCategory && !c.isVisible).sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+        try { return [...held, ...unlistedVoiceRooms(cid)]; } catch { return held; }
+    }
+
+    /**
+     * Voice rooms the app was told about for this server whose channel it was
+     * never sent. All that's known is who is in them, so they get a stand-in name.
+     */
+    function unlistedVoiceRooms(cid) {
+        const client = api.client();
+        let ids;
+        try {
+            ids = client?.conversations?.communityRoomStateCache?.get(BigInt(cid));
+        } catch {}
+        return [...(ids || [])]
+            .filter((id) => !client.channels?.channels?.get(id) && (client.conversations.roomStates?.get(id)?.participants?.length || 0) > 0)
+            .map((id) => ({ id, name: 'Hidden voice channel', type: 1, parentId: null, unlisted: true }));
+    }
+
+    /** What the app holds for this server, for the read-out in the plugin's settings. */
+    function counts(cid) {
+        let list;
+        try {
+            list = api.client()?.channels?.byCommunity?.get(BigInt(cid));
+        } catch {}
+        const channels = list ? values(list).filter((c) => c && !c.isCategory) : null;
+        return {
+            loaded: !!list,
+            total: channels?.length || 0,
+            hidden: channels?.filter((c) => !c.isVisible).length || 0,
+            voiceOnly: unlistedVoiceRooms(cid).length,
+        };
     }
 
     function participants(channel) {
@@ -75,7 +108,9 @@ PlumoseCore.definePlugin('hiddenChannels', (api) => {
                 row('Topic', channel.description),
                 isVoice(channel) && row('In voice', inVoice.length ? inVoice.join(', ') : 'Nobody right now'),
                 row('Channel ID', String(channel.id)),
-                h('div', { class: 'osm-setting-desc' }, 'Osmium sends the channel’s name and topic to everyone in the server, but only sends messages to people who can view it.'),
+                h('div', { class: 'osm-setting-desc' }, channel.unlisted
+                    ? 'Osmium was told who is in this voice room, but not the channel’s name.'
+                    : 'Osmium was sent this channel’s name and topic, but not its messages.'),
             ),
         });
     }
@@ -198,6 +233,26 @@ PlumoseCore.definePlugin('hiddenChannels', (api) => {
         },
         onSettings() {
             apply();
+        },
+        /** Says what Osmium actually sent, so an empty list can be told apart from a broken plugin. */
+        renderInfo(el) {
+            const cid = communityId();
+            if (!cid) {
+                el.append(h('div', { class: 'osm-setting-desc' }, 'Open a server to see how many of its channels are hidden from you.'));
+                return;
+            }
+            const c = counts(cid);
+            const name = api.client()?.communities?.communities?.get(BigInt(cid))?.name || 'This server';
+            const found = c.hidden + c.voiceOnly;
+            el.append(h('div', { class: 'osm-hc-info' },
+                h('div', { class: 'osm-setting-label' }, name),
+                h('div', { class: 'osm-setting-desc' }, !c.loaded
+                    ? 'Osmium hasn’t loaded this server’s channels yet.'
+                    : `Osmium was sent ${c.total} channel${c.total === 1 ? '' : 's'} here. ${c.hidden} of them ${c.hidden === 1 ? 'is' : 'are'} hidden from you`
+                        + `${c.voiceOnly ? `, plus ${c.voiceOnly} active voice room${c.voiceOnly === 1 ? '' : 's'} in channels it wasn’t sent` : ''}.`),
+                c.loaded && found === 0 && h('div', { class: 'osm-setting-desc' },
+                    'Nothing to show: Osmium’s server only sent the channels you can view, so the rest aren’t on this computer. You also see every channel if you own the server or are an administrator.'),
+            ));
         },
     };
 });

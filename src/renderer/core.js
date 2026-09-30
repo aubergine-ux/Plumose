@@ -7,6 +7,7 @@
  *       stop() {},                // plugin switched off; tracked subscriptions are cleaned up for you
  *       onSettings(next, prev) {},
  *       renderSettings(el) {},    // optional custom settings UI in the Mods screen
+ *       renderInfo(el) {},        // optional read-out added under the generated settings
  *   }));
  *
  * api: id, settings, setSettings(patch), invoke(name, ...args), on(event, cb),
@@ -272,7 +273,8 @@
         const s = pluginSettings(p.id);
         const entry = registry.get(p.id);
         const hasSchema = Object.values(p.settings).some((spec) => !spec.hidden);
-        const hasSettings = hasSchema || typeof entry?.instance?.renderSettings === 'function';
+        const hasInfo = typeof entry?.instance?.renderInfo === 'function';
+        const hasSettings = hasSchema || hasInfo || typeof entry?.instance?.renderSettings === 'function';
 
         const body = h('div', { class: 'osm-plugin-settings' });
         if (typeof entry?.instance?.renderSettings === 'function') {
@@ -280,6 +282,14 @@
         } else {
             for (const [key, spec] of Object.entries(p.settings)) {
                 if (!spec.hidden) body.append(settingControl(p.id, key, spec, s[key]));
+            }
+        }
+        // A read-out under the generated settings: what the plugin currently sees.
+        if (hasInfo) {
+            try {
+                entry.instance.renderInfo(body);
+            } catch (err) {
+                console.error(`[Plumose] ${p.id} renderInfo failed`, err);
             }
         }
 

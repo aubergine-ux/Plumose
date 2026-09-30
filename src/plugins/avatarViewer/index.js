@@ -12,5 +12,6 @@ module.exports = {
             options: [['ctrl', 'Ctrl+click (Cmd+click on macOS)'], ['alt', 'Alt+click']],
         },
         serverButton: { type: 'boolean', default: true, label: 'Server icon button', description: 'An image button above the channel list that opens the server’s icon.' },
+        profileButton: { type: 'boolean', default: true, label: 'Profile avatar button', description: 'A button on profile cards that opens the avatar full size.' },
     },
 };

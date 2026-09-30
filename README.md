@@ -215,9 +215,14 @@ the message.
 
 <a name="show-hidden-channels"></a>
 
-Off by default. Osmium's app receives a server's channel list and then hides the channels you lack
-*View Channel* on. This plugin draws those too, with a lock, dimmed, at the end of their category
-(or in one section at the bottom, if you prefer).
+Off by default. Osmium's app hides any channel it holds that you lack *View Channel* on. This plugin
+draws those too, with a lock, dimmed, at the end of their category (or in one section at the bottom,
+if you prefer). Voice rooms the app was told about in channels it was never sent show up as
+*Hidden voice channel*, with who's in them.
+
+It can only show what Osmium's server sent to your computer. The plugin's settings in the Plumose
+screen say how many channels the current server sent and how many of those are hidden from you. If
+that says none, the server is only sending the channels you can view and there is nothing to list.
 
 Click a hidden channel for its name, type, category, topic and, for voice channels, who's in it.
 **You can't read its messages.** The server checks that, and the plugin doesn't try to get round it.
