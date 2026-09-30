@@ -1,0 +1,155 @@
+.osm-pl-modal { width: min(620px, 100%); height: min(720px, 100%); }
+.osm-pl-modal .osm-modal-body { display: flex; flex-direction: column; gap: 10px; padding-bottom: 0; }
+
+.osm-pl-tabs {
+    display: flex;
+    gap: 2px;
+    padding: 2px;
+    border-radius: 10px;
+    background: var(--bg-weak-50, #1a1c20);
+}
+.osm-pl-tabs button {
+    flex: 1;
+    padding: 6px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: var(--text-sub-600, #99a0ae);
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+}
+.osm-pl-tabs button:hover { color: var(--text-strong-950, #f5f7fa); }
+.osm-pl-tabs button.is-on { background: var(--bg-soft-200, #262a30); color: var(--text-strong-950, #f5f7fa); }
+
+.osm-pl-toolbar { display: flex; align-items: center; gap: 8px; }
+.osm-pl-search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px;
+    border: 1px solid var(--stroke-soft-200, #2b303b);
+    border-radius: 8px;
+    background: var(--bg-weak-50, #1a1c20);
+    color: var(--text-soft-400, #717784);
+}
+.osm-pl-search:focus-within { border-color: var(--primary-base, #1db954); }
+.osm-pl-search span { display: grid; }
+.osm-pl-search input {
+    flex: 1;
+    min-width: 0;
+    padding: 7px 0;
+    border: 0;
+    outline: none;
+    background: none;
+    color: var(--text-strong-950, #f5f7fa);
+    font: inherit;
+    font-size: 13px;
+}
+.osm-pl-filter { width: auto; flex: 0 0 auto; }
+
+.osm-pl-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    margin: 0 -16px;
+    padding: 0 16px 16px;
+}
+
+.osm-pl-list { display: flex; flex-direction: column; }
+
+.osm-pl-day {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 10px 0 6px;
+    background: var(--bg-white-0, #0e0f11);
+    color: var(--text-soft-400, #717784);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+}
+
+.osm-pl-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    padding: 4px 6px;
+    border-radius: 8px;
+}
+.osm-pl-row:hover { background: var(--bg-weak-50, #1a1c20); }
+.osm-pl-friend { min-height: 48px; }
+
+.osm-pl-time {
+    flex: 0 0 auto;
+    min-width: 58px;
+    white-space: nowrap;
+    color: var(--text-soft-400, #717784);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+}
+
+.osm-pl-dot {
+    flex: 0 0 auto;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-soft-400, #717784);
+}
+.osm-pl-dot.is-online { background: var(--state-success-base, #1fc16b); }
+.osm-pl-dot.is-idle { background: var(--state-warning-base, #f6b51e); }
+.osm-pl-dot.is-offline { background: var(--text-disabled-300, #525866); }
+.osm-pl-dot.is-activity { background: var(--primary-base, #1db954); }
+.osm-pl-dot.is-friend { background: var(--state-information-base, #335cff); }
+.osm-pl-dot.is-removed { background: var(--state-error-base, #fb3748); }
+
+.osm-pl-avatar {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    overflow: hidden;
+    border-radius: 50%;
+    background: hsl(var(--hue, 200) 45% 35%);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+}
+.osm-pl-friend .osm-pl-avatar { width: 34px; height: 34px; }
+.osm-pl-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.osm-pl-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--text-sub-600, #99a0ae);
+    font-size: 13px;
+    line-height: 18px;
+    text-overflow: ellipsis;
+}
+.osm-pl-row:not(.osm-pl-friend) .osm-pl-text { white-space: nowrap; }
+.osm-pl-text strong { color: var(--text-strong-950, #f5f7fa); font-weight: 600; }
+.osm-pl-text q { color: var(--text-strong-950, #f5f7fa); }
+.osm-pl-muted { color: var(--text-soft-400, #717784); }
+.osm-pl-line { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12px; }
+
+.osm-pl-name {
+    display: inline;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text-strong-950, #f5f7fa);
+    font: inherit;
+    font-weight: 600;
+}
+.osm-pl-name.is-link { cursor: pointer; }
+.osm-pl-name.is-link:hover { text-decoration: underline; }
+
+.osm-pl-bell { width: 28px; height: 28px; opacity: 0; }
+.osm-pl-row:hover .osm-pl-bell, .osm-pl-bell:focus-visible, .osm-pl-bell.is-on { opacity: 1; }
+
+.osm-pl-more { align-self: center; margin: 10px 0; }
