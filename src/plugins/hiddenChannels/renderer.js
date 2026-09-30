@@ -45,12 +45,10 @@ PlumoseCore.definePlugin('hiddenChannels', (api) => {
 
     /** Channels of this server the app holds but won't draw. */
     function hiddenChannels(cid) {
-        let list;
-        try {
-            list = api.client()?.channels?.byCommunity?.get(BigInt(cid));
-        } catch {}
-        const held = values(list).filter((c) => c && !c.isCategory && !c.isVisible).sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
-        try { return [...held, ...unlistedVoiceRooms(cid)]; } catch { return held; }
+        const hidden = values(api.client()?.channels?.channels)
+            .filter((c) => c && String(c.communityId) === cid && !c.isCategory && !c.isVisible)
+            .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+        try { return [...hidden, ...unlistedVoiceRooms(cid)]; } catch { return hidden; }
     }
 
     /**
@@ -70,16 +68,13 @@ PlumoseCore.definePlugin('hiddenChannels', (api) => {
 
     /** What the app holds for this server, for the read-out in the plugin's settings. */
     function counts(cid) {
-        let list;
-        try {
-            list = api.client()?.channels?.byCommunity?.get(BigInt(cid));
-        } catch {}
-        const channels = list ? values(list).filter((c) => c && !c.isCategory) : null;
+        const all = values(api.client()?.channels?.channels)
+            .filter((c) => c && String(c.communityId) === cid && !c.isCategory);
         return {
-            loaded: !!list,
-            total: channels?.length || 0,
-            hidden: channels?.filter((c) => !c.isVisible).length || 0,
-            voiceOnly: unlistedVoiceRooms(cid).length,
+            loaded: all.length > 0,
+            total: all.length,
+            hidden: all.filter((c) => !c.isVisible).length,
+            voiceOnly: (() => { try { return unlistedVoiceRooms(cid).length; } catch { return 0; } })(),
         };
     }
 
