@@ -1,0 +1,20 @@
+/* Header buttons borrow Osmium's own icon class; this only handles colour and state. */
+.osm-popout-btn {
+    color: rgba(255, 255, 255, .48);
+    color: color-mix(in srgb, var(--text-strong-950, #fff) 48%, transparent);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: color .15s, background .15s;
+}
+.osm-popout-btn svg { width: 17px; height: 17px; }
+.osm-popout-btn:hover { color: var(--text-strong-950, #fff); background: var(--bg-soft-200, #262a30); }
+.osm-popout-btn:focus-visible { outline: 2px solid var(--focus-neutral, rgba(255,255,255,.3)); }
+.osm-popout-btn.is-on { color: var(--primary-base, #1db954); }
+
+/* Pop-out windows: just the conversation. The sidebar holds the community rail,
+   the chat list and the account card; the chat is the rest of the layout. */
+html.osm-popout nav:has([class*="userInfoContainer-"]) { display: none !important; }
+html.osm-popout main[class*="chatContainer-"] { border-radius: 0; }
+/* Narrow pop-outs get Osmium's mobile layout; its back arrow would lead to a chat list that isn't there. */
+html.osm-popout main[class*="chatContainer-"] [class*="backButton-"] { display: none !important; }
+html.osm-popout.osm-popout-hide-profile [class*="main-"] > [class*="panel-"]:last-child:not(:first-child) { display: none !important; }
