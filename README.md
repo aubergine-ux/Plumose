@@ -5,7 +5,7 @@
 [![Osmium Client Mod](https://img.shields.io/badge/Osmium-Client%20Mod-FFB6D9?style=for-the-badge&labelColor=FFD6EC)](https://github.com/aubergine-ux/Plumose)
 [![Version](https://img.shields.io/badge/Version-1.2.0-C9A7FF?style=for-the-badge&labelColor=E5D4FF)](package.json)
 [![License: MIT](https://img.shields.io/badge/License-MIT-A9C9FF?style=for-the-badge&labelColor=D6E4FF)](LICENSE)
-[![Plugins](https://img.shields.io/badge/Plugins-14-FFCBA4?style=for-the-badge&labelColor=FFE3C7)](#plugins)
+[![Plugins](https://img.shields.io/badge/Plugins-15-FFCBA4?style=for-the-badge&labelColor=FFE3C7)](#plugins)
 
 ![JavaScript](https://img.shields.io/badge/JavaScript-No%20build%20step-A7C7FF?style=flat&logo=javascript&logoColor=1B3A6B&labelColor=D6E8FF)
 ![Node](https://img.shields.io/badge/Node-18%2B-B8E6B8?style=flat&logo=nodedotjs&logoColor=1F5C1F&labelColor=E0F5E0)
@@ -14,7 +14,7 @@
 
 </div>
 
-A Vencord-style client mod for the **official Osmium desktop app**, with a plugin system and fourteen
+A Vencord-style client mod for the **official Osmium desktop app**, with a plugin system and fifteen
 plugins. It changes nothing inside Osmium's code. Like Vencord on Discord, it moves the official
 `app.asar` aside and puts a small loader in its place. The loader starts the mod and then boots the
 untouched official app.
@@ -31,12 +31,13 @@ The version comes from `package.json`.
 | 🎵 **[Music Controls](#music-controls)** | Now playing, seek, skip and volume, docked above your account card. | On |
 | 🪟 **[Pop-out Chat](#pop-out-chat)** | Opens any chat in its own window, with an always-on-top pin. | On |
 | 🕒 **[Friend Presence Log](#friend-presence-log)** | Records friends coming online, going idle or offline, and what they play or listen to. | On |
-| 📁 **[Server Folders](#server-folders)** | Groups servers in the left rail into collapsible, coloured folders. | On |
 | 🛡️ **[Show Hidden Roles](#show-hidden-roles)** | Marks non-public roles on profiles and lists every role a server has. | On |
 | ⚡ **[Quick Switcher](#quick-switcher)** | Ctrl+K to jump to any chat, channel or server. | On |
 | 🖼️ **[Avatar Viewer](#avatar-viewer)** | Ctrl+click any profile picture or server icon to open it full size. | On |
 | 💬 **[Custom Status](#custom-status)** | Set a status message that shows under your name. | On |
-| 🔒 **[Show Hidden Channels](#show-hidden-channels)** | Lists channels you can't open, with their name and topic. | Off |
+| 📌 **[Pinned DMs](#pinned-dms)** | Keeps chosen chats at the top of your Direct Messages list. | On |
+| 🔒 **[Show Hidden Channels](#show-hidden-channels)** | Lists channels you can't open, with their name and topic. | On |
+| 📁 **[Server Folders](#server-folders)** | Groups servers in the left rail into collapsible, coloured folders. | Off |
 | 🎧 **[Voice Overview](#voice-overview)** | Everyone in voice across your servers, in one list. | Off |
 | 🤫 **[Silent Typing](#silent-typing)** | Stops Osmium telling others when you're typing. | Off |
 | 🙈 **[Privacy Blur](#privacy-blur)** | Blurs messages, names and pictures until you point at them. | Off |
@@ -149,6 +150,8 @@ everyone's status at once then.
 
 <a name="server-folders"></a>
 
+Off by default.
+
 - The folder button at the bottom of the server rail creates a folder: pick a name, a colour and its servers.
 - Drag a server onto a folder to add it.
 - Click a folder to open or close it. A closed folder shows its first four server icons, plus an unread dot or a mention dot.
@@ -211,11 +214,28 @@ the message.
 </details>
 
 <details>
+<summary><h3>📌 Pinned DMs</h3></summary>
+
+<a name="pinned-dms"></a>
+
+Point at a chat in your Direct Messages list and click the pin at its right edge to pin it. Pinned
+chats sit at the top under a small *Pinned* heading, and the rest keep Osmium's latest-message-first
+order below a line. Point at a pinned chat and click the crossed-out pin to unpin it.
+
+The plugin's settings in the Plumose screen list your pinned chats, where you can reorder or unpin
+them. Pinned chats stay in the order you pinned them, or switch them to latest message first. The
+heading and line can be turned off. Pins are stored locally, so they don't sync to Osmium on other
+devices. Osmium leaves chats with no messages out of the list, so a pinned chat appears once it has
+one.
+
+</details>
+
+<details>
 <summary><h3>🔒 Show Hidden Channels</h3></summary>
 
 <a name="show-hidden-channels"></a>
 
-Off by default. Osmium's app hides any channel it holds that you lack *View Channel* on. This plugin
+Osmium's app hides any channel it holds that you lack *View Channel* on. This plugin
 draws those too, with a lock, dimmed, at the end of their category (or in one section at the bottom,
 if you prefer). Voice rooms the app was told about in channels it was never sent show up as
 *Hidden voice channel*, with who's in them.
@@ -384,13 +404,13 @@ src/plugins/*             the plugins
 <details>
 <summary><h2>⚠️ Known limitations</h2></summary>
 
-- **Plugins added in 1.2.0** (hidden roles, hidden channels, quick switcher, avatar viewer, custom status, voice overview, silent typing, privacy blur, custom CSS): written from Osmium's web bundle and checked against a simulated page, not yet against a live session. If one misbehaves, switch it off in the Plumose screen.
+- **Plugins added in 1.2.0** (hidden roles, hidden channels, quick switcher, avatar viewer, custom status, voice overview, silent typing, privacy blur, custom CSS) and **Pinned DMs**: written from Osmium's web bundle and checked against a simulated page, not yet against a live session. If one misbehaves, switch it off in the Plumose screen.
 - **Show Hidden Channels / Roles:** they show what Osmium's app already holds. If the server stops sending channels or roles you can't see, there is nothing to show.
 - **Shuffle/repeat on the "This computer" music source:** Spotify's Linux app reports both over MPRIS but ignores changes, so the buttons are hidden there.
 - **Spotify Web API source:** not yet tested against a live Spotify developer app.
 - **Windows and macOS:** the install paths are best guesses and untested. On macOS, editing the app bundle may trip Gatekeeper. On Windows, the Osmium installer replaces the whole folder on update, so run `install` again afterwards.
 - **Celebrity Blocked:** doesn't cover server nicknames, which Osmium shows ahead of the display name.
-- **Folders:** stored locally, so they don't sync to Osmium on other devices.
+- **Folders and Pinned DMs:** stored locally, so they don't sync to Osmium on other devices.
 
 </details>
 

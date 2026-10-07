@@ -3,7 +3,7 @@
 module.exports = {
     name: 'Show Hidden Channels',
     description: 'Channels you can’t open show up in the channel list with a lock. Click one for its name, topic and who’s in voice. Messages stay out of reach.',
-    enabledByDefault: false,
+    enabledByDefault: true,
     settings: {
         placement: {
             type: 'select',
